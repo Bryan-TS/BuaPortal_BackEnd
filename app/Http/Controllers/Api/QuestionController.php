@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Question;
 use Exception;
 use Illuminate\Http\Request;
+use PhpParser\Node\Expr;
 
 class QuestionController extends Controller
 {
@@ -20,13 +21,13 @@ class QuestionController extends Controller
             $code = 204;
         }
 
-        $reponse = array(
+        $response = array(
             'status' => $status,
             'code' => $code,
             'data' => $data
         );
 
-        return $reponse;
+        return $response;
     }
 
     public function store(Request $request)
@@ -50,49 +51,117 @@ class QuestionController extends Controller
             $code = 400;
         }
 
-        $reponse = array(
+        $response = array(
             'status' => $status,
             'code' => $code,
             'data' => $data
         );
 
-        return $reponse;        
+        return $response;        
     }
 
 
     public function show($id)
     {
+        $status = "Success";
+        $code = 200;
+
         $question = Question::find($id);
-        return $question;
+
+        if(empty($question)){
+            $code = 204;
+        }
+
+        $response = array(
+            'status' => $status,
+            'code' => $code,
+            'data' => $question
+        );
+
+        return $response;
     }
 
     public function update(Request $request, $id)
     {
-        $question = Question::findOrFail($id);
-        $question->category = $request->category;
-        $question->title = $request->title;
-        $question->description = $request->description;
+        $status = "Success";
+        $code = 200;
+        $data = array();
 
-        $question->save();
+        try{    
 
-        return $question;
+            $question = Question::findOrFail($id);
+            $question->category = $request->category;
+            $question->title = $request->title;
+            $question->description = $request->description;
+
+            $question->save();
+
+            $data = array("question_id" => $question->id);
+
+        }catch(Exception $e){
+            $status = "Error";
+            $code = 400;
+        }
+
+        $response = array(
+            'status' => $status,
+            'code' => $code,
+            'data' => $data
+        );
+
+        return $response;
     }
 
 
     public function destroy($id)
     {
-        $question = Question::destroy($id);
-        return $question;
+        $status = "Success";
+        $code = 200;
+        $data = array();
+
+        try{
+            $data = Question::destroy($id);
+        }catch(Exception $e){
+            $status = "Error";
+            $code = 400;
+        }
+
+        $response = array(
+            'status' => $status,
+            'code' => $code,
+            'data' => $data
+        );
+        
+        return $response;
     }
 
     public function questionsByUser($id)
     {
-        $questions = Question::where('user_id', '=', $id)->get();
-        return $questions;
+        $status = "Success";
+        $code = 200;
+        $data = array();
+
+        $data = Question::where('user_id', '=', $id)->get();
+
+        if(empty($data)){
+            $code = 204;
+        }
+
+        $response = array(
+            'status' => $status,
+            'code' => $code,
+            'data' => $data
+        );
+
+        return $response;
     }
 
     public function questionsBySearching($searchingTerm)
     {
+        $status = "Success";
+        $code = 200;
+        $data = array();
+
         $keywords = explode(" ", $searchingTerm);
         $result = Question::query();
 
@@ -104,8 +173,18 @@ class QuestionController extends Controller
             $result->orWhere('title', 'LIKE', '%'.$word.'%');
         }
         
-        $results = $result->get();
-        // $questions = Question::where('title', 'LIKE', "%{$searchingTerm}%")->get();
-        return $results;
+        $data = $result->get();
+
+        if(empty($data)){
+            $code = 204;
+        }
+
+        $response = array(
+            'status' => $status,
+            'code' => $code,
+            'data' => $data
+        );
+
+        return $response;
     }
 }
