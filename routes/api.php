@@ -27,7 +27,7 @@ Route::controller(UserController::class)->group(function(){
 });
 
 Route::controller(QuestionController::class)->group(function(){
-    Route::get('/question','index');
+    Route::get('/questions','index');
     Route::post('/question','store');
     Route::get('/question/{id}','show');
     Route::put('/question/{id}','update');
