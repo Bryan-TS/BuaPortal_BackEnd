@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Question;
+use Exception;
 use Illuminate\Http\Request;
 
 class QuestionController extends Controller
@@ -12,18 +13,17 @@ class QuestionController extends Controller
     {
         $status = "Success";
         $code = 200;
-        $data = array();
 
-        $questions = Question::all(); 
+        $data = Question::all(); 
 
-        if(empty($questions)){
+        if(empty($data)){
             $code = 204;
         }
 
         $reponse = array(
             'status' => $status,
             'code' => $code,
-            'data' => $data,
+            'data' => $data
         );
 
         return $reponse;
@@ -31,13 +31,32 @@ class QuestionController extends Controller
 
     public function store(Request $request)
     {
-        $question = new Question();
-        $question->category = $request->category;
-        $question->title = $request->title;
-        $question->description = $request->description;
-        $question->user_id = $request->userId;
+        $status = "Success";
+        $code = 200;
+        $data = array();        
 
-        $question->save();
+        try{
+
+            $question = new Question();
+            $question->category = $request->category;
+            $question->title = $request->title;
+            $question->description = $request->description;
+            $question->user_id = $request->userId;
+
+            $question->save();            
+            $data = array("question_id" => $question->id);
+        }catch(Exception $e){
+            $status = "Error";
+            $code = 400;
+        }
+
+        $reponse = array(
+            'status' => $status,
+            'code' => $code,
+            'data' => $data
+        );
+
+        return $reponse;        
     }
 
 
