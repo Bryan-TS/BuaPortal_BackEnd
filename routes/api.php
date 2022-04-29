@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\ResponseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,3 +37,12 @@ Route::controller(QuestionController::class)->group(function(){
     Route::get('/questionsBySearching/{searchingTerm}','questionsBySearching');
 });
 
+Route::controller(ResponseController::class)->group(function(){
+    Route::get('/response','index');
+    Route::post('/response','store');
+    Route::get('/response/{id}','show');
+    Route::put('/response/{id}','update');
+    Route::delete('/response/{id}','destroy');
+    Route::get('/responsesByQuestion/{id}','responsesByQuestion');
+
+});
