@@ -52,8 +52,8 @@ Route::controller(ReactionController::class)->group(function(){
     Route::get('/reaction','index');
     Route::post('/reaction','store');
     Route::get('/reaction/{id}','show');
-    Route::put('/reation/{id}','update');
-    Route::delete('/reation/{id}','destroy');
+    Route::put('/reaction/{id}','update');
+    Route::delete('/reaction/{id}','destroy');
     Route::get('/reactionByResponse/{id}','reactionByResponse');
     Route::get('/reactionsByUserAndResponse/{user_id}/{response_id}','reactionsByUserAndResponse');
     Route::get('/likesByResponse/{id}','likesByResponse');
