@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\QuestionController;
+use App\Http\Controllers\Api\ReactionController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ResponseController;
 use Illuminate\Http\Request;
@@ -45,4 +46,16 @@ Route::controller(ResponseController::class)->group(function(){
     Route::delete('/response/{id}','destroy');
     Route::get('/responsesByQuestion/{id}','responsesByQuestion');
 
+});
+
+Route::controller(ReactionController::class)->group(function(){
+    Route::get('/reaction','index');
+    Route::post('/reaction','store');
+    Route::get('/reaction/{id}','show');
+    Route::put('/reaction/{id}','update');
+    Route::delete('/reaction/{id}','destroy');
+    Route::get('/reactionByResponse/{id}','reactionByResponse');
+    Route::get('/reactionsByUserAndResponse/{user_id}/{response_id}','reactionsByUserAndResponse');
+    Route::get('/likesByResponse/{id}','likesByResponse');
+    Route::get('/unlikesByResponse/{id}','unlikesByResponse');
 });

@@ -138,7 +138,10 @@ class ResponseController extends Controller
         $code = 200;
         $data = array();
 
-        $data = Response::where('question_id', '=', $id)->get();
+        $data = Response::select('responses.id','responses.description','responses.user_id','responses.question_id','responses.response_id','users.name','users.lastName')
+                        ->join('users','responses.user_id','=','users.id')
+                        ->where('question_id', '=', $id)
+                        ->get();
 
         if(empty($data)){
             $code = 204;
