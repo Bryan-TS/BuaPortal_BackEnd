@@ -56,21 +56,30 @@ class UserController extends Controller
     {
         $status = "Success";
         $code = 200;
-        $data = array();  
+        $data = array();
+        
+        $data = User::where('email','=',$request->email)->first();
 
-        try{
-            $user = new User();
-            $user->name = $request->name;
-            $user->lastName = $request->lastName;
-            $user->description = $request->description;
-            $user->email = $request->email;
-            $user->password = $request->password;
-
-            $user->save();
-            $data = array("user_id" => $user->id);
-        }catch(Exception $e){            
-            $status = "Error";
-            $code = 400;
+        if(is_null($data)){
+            try{
+                $user = new User();
+                $user->name = $request->name;
+                $user->lastName = $request->lastName;
+                $user->description = $request->description;
+                $user->email = $request->email;
+                $user->password = $request->password;
+    
+                $user->save();
+                $data = array("user_id" => $user->id);
+            }catch(Exception $e){            
+                $status = "Error";
+                $code = 400;
+            }
+    
+           
+        }else{
+            $code = 208;
+            $data = array();
         }
 
         $response = array(
@@ -78,7 +87,7 @@ class UserController extends Controller
             'code' => $code,
             'data' => $data
         );
-
+        
         return $response;  
     }
 

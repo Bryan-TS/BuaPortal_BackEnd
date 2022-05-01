@@ -66,7 +66,9 @@ class QuestionController extends Controller
         $status = "Success";
         $code = 200;
 
-        $question = Question::find($id);
+        $question = Question::Select('questions.id','questions.category','questions.title','questions.description','questions.user_id','users.name','users.lastName')
+                            ->join('users','users.id','=','questions.user_id')                        
+                            ->find($id);
 
         if(empty($question)){
             $code = 204;
