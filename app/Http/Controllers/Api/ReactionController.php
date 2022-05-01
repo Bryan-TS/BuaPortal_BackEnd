@@ -233,7 +233,7 @@ class ReactionController extends Controller
         $code = 200;
         $data = array();
 
-        $data = Reaction::where('response_id', '=', $id)->get();
+        $data = Reaction::where('response_id', '=', $id)->first();
 
         if(empty($data)){
             $code = 204;
