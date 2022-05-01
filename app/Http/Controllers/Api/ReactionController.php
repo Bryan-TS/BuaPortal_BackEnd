@@ -64,7 +64,7 @@ class ReactionController extends Controller
         $data = array();
 
         $data = Reaction::where('response_id', '=', $id)
-                        ->where('liked', '=', 1)  
+                        ->where('unliked', '=', 1)  
                         ->get();
 
         $data = $data->count();
